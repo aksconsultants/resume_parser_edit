@@ -2,10 +2,10 @@ import csv
 import re
 import spacy
 import sys
-reload(sys)
+import importlib
+importlib.reload(sys)
 import pandas as pd
-sys.setdefaultencoding('utf8')
-from cStringIO import StringIO
+from io import StringIO
 from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import TextConverter
 from pdfminer.layout import LAParams
@@ -14,8 +14,7 @@ import os
 import sys, getopt
 import numpy as np
 from bs4 import BeautifulSoup
-import urllib2
-from urllib2 import urlopen
+from urllib.request import urlopen
 #Function converting pdf to string
 def convert(fname, pages=None):
     if not pages:
@@ -28,7 +27,7 @@ def convert(fname, pages=None):
     converter = TextConverter(manager, output, laparams=LAParams())
     interpreter = PDFPageInterpreter(manager, converter)
 
-    infile = file(fname, 'rb')
+    infile = open(fname, 'rb')
     for page in PDFPage.get_pages(infile, pagenums):
         interpreter.process_page(page)
     infile.close()
@@ -38,8 +37,8 @@ def convert(fname, pages=None):
     return text
 #Function to extract names from the string using spacy
 def extract_name(string):
-    r1 = unicode(string)
-    nlp = spacy.load('xx')
+    r1 = str(string)
+    nlp = spacy.load('xx_ent_wiki_sm')
     doc = nlp(r1)
     for ent in doc.ents:
         if(ent.label_ == 'PER'):
@@ -55,7 +54,7 @@ def extract_email_addresses(string):
     r = re.compile(r'[\w\.-]+@[\w\.-]+')
     return r.findall(string)
 #Converting pdf to string
-resume_string = convert("/home/ashay/cvscan/data/sample/resume.pdf")
+resume_string = convert("C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.pdf")
 resume_string1 = resume_string
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
@@ -71,13 +70,13 @@ def extract_information(string):
     for item in soup.find_all('div', attrs={'id' : "mw-content-text"}):
         print(item.find('p').get_text())
         print('\n')
-with open('techatt.csv', 'rb') as f:
+with open('techatt.csv', 'r') as f:
     reader = csv.reader(f)
     your_listatt = list(reader)
-with open('techskill.csv', 'rb') as f:
+with open('techskill.csv', 'r') as f:
     reader = csv.reader(f)
     your_list = list(reader)
-with open('nontechnicalskills.csv', 'rb') as f:
+with open('nontechnicalskills.csv', 'r') as f:
     reader = csv.reader(f)
     your_list1 = list(reader)
 #Sets are used as it has a a constant time for lookup hence the overall the time for the total code will not exceed O(n)
