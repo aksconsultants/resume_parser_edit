@@ -15,12 +15,11 @@ import sys, getopt
 import numpy as np
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
-import win32com.client
-def convertdoc(filepath):
-    doc = win32com.client.GetObject(filepath)
-    filetext = doc.Range().Text
-    return filetext
-#Function converting pdf to string
+import docx2txt
+
+resume1 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.docx"
+resume2 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.pdf"
+
 def convert(fname, pages=None):
     if not pages:
         pagenums = set()
@@ -40,16 +39,16 @@ def convert(fname, pages=None):
     text = output.getvalue()
     output.close
     return text
-#Function to extract names from the string using spacy
-def extract_name(string):
-    r1 = str(string)
-    nlp = spacy.load('xx_ent_wiki_sm')
-    doc = nlp(r1)
-    for ent in doc.ents:
-        if(ent.label_ == 'PER'):
-            result = ent.text
+
+def extract_name(my_text):
+    nlp = spacy.load('en')
+    doc_2 = nlp(my_text)
+    for ent in doc_2.ents:
+        if ent.label_ == "PERSON":
+            name = ent.text
             break
-    return result
+    return name
+
 #Function to extract Phone Numbers from string using regular expressions
 def extract_phone_numbers(string):
     r = re.compile(r'(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})')
@@ -60,8 +59,8 @@ def extract_email_addresses(string):
     r = re.compile(r'[\w\.-]+@[\w\.-]+')
     return r.findall(string)
 #Converting pdf to string
-#resume_string = convert("C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.pdf")
-resume_string = convertdoc("C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.docx")
+resume_string = convert(resume2)
+#resume_string = docx2txt.process(resume1)
 resume_string1 = resume_string
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
@@ -99,6 +98,7 @@ for word in resume_string.split(" "):
         nontechskills.append(word)
 
 entities = {}
+        
 entities["name"] = extract_name(resume_string1)
 entities["phone"] = extract_phone_numbers(resume_string)
 entities["email"] = extract_email_addresses(resume_string)
@@ -106,4 +106,3 @@ entities["technical skills"] = remove_duplicates(skills)
 entities["nontechnical skills"] = remove_duplicates(nontechskills)
 
 print(entities)
-
