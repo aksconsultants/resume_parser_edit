@@ -54,13 +54,23 @@ def extract_phone_numbers(string):
     r = re.compile(r'(\d{3}[-\.\s]??\d{3}[-\.\s]??\d{4}|\(\d{3}\)\s*\d{3}[-\.\s]??\d{4}|\d{3}[-\.\s]??\d{4})')
     phone_numbers = r.findall(string)
     return [re.sub(r'\D', '', number) for number in phone_numbers]
+
 #Function to extract Email address from a string using regular expressions
 def extract_email_addresses(string):
     r = re.compile(r'[\w\.-]+@[\w\.-]+')
     return r.findall(string)
+    
+# Remove duplicate elements from a list
+def remove_duplicates(duplicate): 
+    final_list = [] 
+    for num in duplicate: 
+        if num not in final_list: 
+            final_list.append(num) 
+    return final_list 
+
 #Converting pdf to string
-#resume_string = convert(resume2)
-resume_string = docx2txt.process(resume1)
+resume_string = convert(resume2)
+#resume_string = docx2txt.process(resume1)
 resume_string1 = resume_string
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
@@ -80,14 +90,7 @@ s1 = your_list
 skillindex = []
 skills = []
 skillsatt = []
-# Remove duplicate elements from a list
-def remove_duplicates(duplicate): 
-    final_list = [] 
-    for num in duplicate: 
-        if num not in final_list: 
-            final_list.append(num) 
-    return final_list 
-    
+ 
 for word in resume_string.split(" "):
     if word in s:
         skills.append(word)
