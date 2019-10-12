@@ -28,5 +28,5 @@ Set the directory to the one which contains the extracted files, and save your r
 
 ## Sample Output
 
-![Page](https://i.imgur.com/4U6IfvX.png)
+	{'name': 'Jon Snow', 'phone': ['9933995693'], 'email': ['ashaywalke@iitkgp.ac.in'], 'technical skills': ['python', 'opencv', 'c', 'c++', 'scikit-learn', 'matplotlib', 'numpy', 'matlab', 'algorithms'], 'nontechnical skills': []}
 
