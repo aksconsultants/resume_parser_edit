@@ -17,9 +17,6 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import docx2txt
 
-resume1 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.docx"
-resume2 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resumeold.pdf"
-
 def convert(fname, pages=None):
     if not pages:
         pagenums = set()
@@ -68,15 +65,18 @@ def remove_duplicates(duplicate):
             final_list.append(num) 
     return final_list 
 
-#Converting pdf to string
-resume_string = convert(resume2)
-#resume_string = docx2txt.process(resume1)
-resume_string1 = resume_string
+resume = str(sys.argv[1])
+filename, file_extension = os.path.splitext(resume)
+if file_extension == '.docx':
+    resume_string = docx2txt.process(resume)
+elif file_extension == '.pdf':
+    resume_string = convert(resume)
+else:
+    print('Unsupported format!')
+
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
-resume_string1 = resume_string1.replace('\n',' ')
-#Converting all the charachters in lower case
-resume_string = resume_string.lower()
+resume_string = resume_string.replace('\n',' ')
 
 with open('techskill.csv', 'r') as f:
     reader = csv.reader(f)
@@ -84,6 +84,7 @@ with open('techskill.csv', 'r') as f:
 with open('nontechnicalskills.csv', 'r') as f:
     reader = csv.reader(f)
     your_list1 = list(reader)
+
 #Sets are used as it has a a constant time for lookup hence the overall the time for the total code will not exceed O(n)
 s = set(your_list[0])
 s1 = your_list
@@ -104,7 +105,7 @@ for word in resume_string.split(" "):
 
 entities = {}
         
-entities["name"] = extract_name(resume_string1)
+entities["name"] = extract_name(resume_string)
 entities["phone"] = extract_phone_numbers(resume_string)
 entities["email"] = extract_email_addresses(resume_string)
 entities["technical skills"] = remove_duplicates(skills)
