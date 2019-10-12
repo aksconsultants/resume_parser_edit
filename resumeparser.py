@@ -15,6 +15,11 @@ import sys, getopt
 import numpy as np
 from bs4 import BeautifulSoup
 from urllib.request import urlopen
+import win32com.client
+def convertdoc(filepath):
+    doc = win32com.client.GetObject(filepath)
+    filetext = doc.Range().Text
+    return filetext
 #Function converting pdf to string
 def convert(fname, pages=None):
     if not pages:
@@ -55,22 +60,13 @@ def extract_email_addresses(string):
     r = re.compile(r'[\w\.-]+@[\w\.-]+')
     return r.findall(string)
 #Converting pdf to string
-resume_string = convert("C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.pdf")
+#resume_string = convert("C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.pdf")
+resume_string = convertdoc("C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.docx")
 resume_string1 = resume_string
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
 #Converting all the charachters in lower case
 resume_string = resume_string.lower()
-#Information Extraction Function
-def extract_information(string):
-    string.replace (" ", "+")
-    query = string
-    soup = BeautifulSoup(urlopen("https://en.wikipedia.org/wiki/" + query), "html.parser")
-    #creates soup and opens URL for Google. Begins search with site:wikipedia.com so only wikipedia
-    #links show up. Uses html parser.
-    for item in soup.find_all('div', attrs={'id' : "mw-content-text"}):
-        print(item.find('p').get_text())
-        print('\n')
 with open('techskill.csv', 'r') as f:
     reader = csv.reader(f)
     your_list = list(reader)
@@ -85,12 +81,12 @@ skills = []
 skillsatt = []
 # Remove duplicate elements from a list
 def remove_duplicates(duplicate): 
-	final_list = [] 
-	for num in duplicate: 
-		if num not in final_list: 
-			final_list.append(num) 
-	return final_list 
-	
+    final_list = [] 
+    for num in duplicate: 
+        if num not in final_list: 
+            final_list.append(num) 
+    return final_list 
+    
 for word in resume_string.split(" "):
     if word in s:
         skills.append(word)
@@ -110,3 +106,4 @@ entities["technical skills"] = remove_duplicates(skills)
 entities["nontechnical skills"] = remove_duplicates(nontechskills)
 
 print(entities)
+
