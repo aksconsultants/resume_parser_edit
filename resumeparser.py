@@ -18,7 +18,7 @@ from urllib.request import urlopen
 import docx2txt
 
 resume1 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.docx"
-resume2 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resume.pdf"
+resume2 = "C:\\Users\\User\\Desktop\\work\\resume-parser-master\\resumeold.pdf"
 
 def convert(fname, pages=None):
     if not pages:
@@ -64,6 +64,7 @@ resume_string = docx2txt.process(resume1)
 resume_string1 = resume_string
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
+resume_string1 = resume_string1.replace('\n',' ')
 #Converting all the charachters in lower case
 resume_string = resume_string.lower()
 
