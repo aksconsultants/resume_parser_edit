@@ -17,6 +17,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import docx2txt
 
+#Function converting pdf to string
 def convert(fname, pages=None):
     if not pages:
         pagenums = set()
@@ -37,6 +38,7 @@ def convert(fname, pages=None):
     output.close
     return text
 
+#Function to extract names from the string using spacy
 def extract_name(my_text):
     nlp = spacy.load('en')
     doc_2 = nlp(my_text)
@@ -57,7 +59,7 @@ def extract_email_addresses(string):
     r = re.compile(r'[\w\.-]+@[\w\.-]+')
     return r.findall(string)
     
-# Remove duplicate elements from a list
+#Function to remove duplicate elements from a list
 def remove_duplicates(duplicate): 
     final_list = [] 
     for num in duplicate: 
@@ -65,6 +67,7 @@ def remove_duplicates(duplicate):
             final_list.append(num) 
     return final_list 
 
+#Reading input from user
 resume = str(sys.argv[1])
 filename, file_extension = os.path.splitext(resume)
 if file_extension == '.docx':
