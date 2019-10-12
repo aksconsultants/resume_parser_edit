@@ -59,13 +59,14 @@ def extract_email_addresses(string):
     r = re.compile(r'[\w\.-]+@[\w\.-]+')
     return r.findall(string)
 #Converting pdf to string
-resume_string = convert(resume2)
-#resume_string = docx2txt.process(resume1)
+#resume_string = convert(resume2)
+resume_string = docx2txt.process(resume1)
 resume_string1 = resume_string
 #Removing commas in the resume for an effecient check
 resume_string = resume_string.replace(',',' ')
 #Converting all the charachters in lower case
 resume_string = resume_string.lower()
+
 with open('techskill.csv', 'r') as f:
     reader = csv.reader(f)
     your_list = list(reader)
