@@ -4,7 +4,7 @@
 
 Code to parse information such as Name, Email, Phone Number, skillset and the technology associated with it.
 
-## requirements
+## Requirements
 Following is the list of python libraries required
 
     cStringIO
@@ -20,11 +20,9 @@ Spacy is an Industrial-Strength Natural Language Processing tool which is used h
     python -m spacy download xx
     
 
-## Code
+## Usage
 
-Set the directory to the one which contains the extracted files, and save your resume with the file name, resume.pdf in the same directory. 
-
-    $ python resumeparser.py
+    $ python resumeparser.py <file path>
 
 ## Sample Output
 
